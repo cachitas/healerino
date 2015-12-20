@@ -1,4 +1,5 @@
 class NPC:
+
     """
     NPC
     """
@@ -7,7 +8,6 @@ class NPC:
         self.name = name
         self._hp = hp
         self._ap = ap
-
 
     def __str__(self):
         return "{} (HP: {:>3})".format(self.name, self.hp)

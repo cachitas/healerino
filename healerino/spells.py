@@ -2,6 +2,7 @@
 Spells
 """
 
+
 class Spell:
 
     @property
@@ -11,4 +12,3 @@ class Spell:
     @property
     def description(self):
         return self._description
-

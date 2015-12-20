@@ -17,6 +17,7 @@ def test_npc_attributes(npc):
 def test_npc_is_alive(npc):
     assert not npc.is_dead
 
+
 def test_npc_is_dead(npc):
     npc.hp = 0
     assert npc.is_dead

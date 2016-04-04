@@ -1,0 +1,92 @@
+<Portrait@BoxLayout>:
+    orientation: 'vertical'
+
+    canvas.before:
+        Color:
+            rgba: 0, 1, 0, .5
+        Rectangle:
+            pos: root.pos
+            size: root.size
+
+    Widget
+
+    Label:
+        text: "NAME"
+        text_size: root.width, None
+        size_hint: (None, None)
+        size: self.texture_size
+        halign: 'left'
+        valign: 'middle'
+
+        # canvas.before:
+        #     Color:
+        #         rgba: 1, 1, 1, .2
+        #     Rectangle:
+        #         pos: root.pos
+        #         size: root.size
+
+    ProgressBar:
+        size_hint_y: None
+        height: '40 dp'
+
+    Widget
+
+
+<Boss@FloatLayout>:
+
+    canvas.before:
+        Color:
+            rgba: 1, 0, 0, 1
+        Rectangle:
+            pos: root.pos
+            size: root.size
+
+    Portrait:
+        pos_hint: {'center_x': 0.5, 'top': 1.0}
+        size_hint: (.8, 1)
+        # height: '50 dp'
+
+
+
+
+<Party@GridLayout>:
+    cols: 2
+    spacing: '10 dp'
+
+    canvas:
+        Color:
+            rgb: 0, 0, 1
+        Rectangle:
+            pos: root.pos
+            size: root.size
+
+    Portrait
+    Portrait
+    Portrait
+    Portrait
+
+
+<Spell@Button>
+
+
+<Spells@GridLayout>:
+    cols: 4
+    spacing: '10 dp'
+
+    Spell
+    Spell
+    Spell
+    Spell
+
+
+<Game>:
+    orientation: 'vertical'
+    spacing: '10 dp'
+    padding: '10 dp'
+
+    Boss:
+        size_hint_y: 1
+    Party:
+        size_hint_y: 2
+    Spells:
+        size_hint_y: 1

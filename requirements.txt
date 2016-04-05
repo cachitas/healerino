@@ -1,6 +1,6 @@
---extra-index-url https://kivy.org/downloads/packages/simple/
-Kivy==1.9.1
-kivy.deps.glew==0.1.4
-kivy.deps.sdl2==0.1.12
-kivy.deps.gstreamer==0.1.5
-
+Cython==0.21.2
+Kivy==1.9.0
+Kivy-Garden==0.1.1
+py==1.4.31
+pytest==2.8.5
+requests==2.8.1

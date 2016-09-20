@@ -17,5 +17,6 @@ dependencies:
         zlib1g-dev
 
 requirements:
-	pip install -r requirements-cython.txt
-	pip install -r requirements.txt
+    pip install --upgrade setuptools pip wheel
+    pip install -r requirements-cython.txt
+    pip install -r requirements.txt

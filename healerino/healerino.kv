@@ -1,14 +1,71 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+ScreenManager:
+    transition: FadeTransition()
+
+    MainScreen
+    BattleScreen
+
+
+<MainScreen>:
+    name: 'main'
+
+    Button:
+        text: 'Start'
+        font_size: 8
+        on_release: app.root.current = 'battle'
+
+
+<BattleScreen>:
+    name: 'battle'
+
+    player: player
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Button:
+            on_release: app.root.current = 'main'
+
+        BossWidget
+
+        ProgressBar:
+            id: cooldown_indicator
+            value: 0
+
+        PlayerWidget:
+            id: player
+
+
+<PlayerWidget>:
+
+    SpellWidget:
+        id: spell_slot_1
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size: root.size
+
+        Label:
+            text: "Mana:"
+
+        ProgressBar:
+            id: manabar
+            value: root.mana
+
+
+
 <Portrait@BoxLayout>:
     orientation: 'vertical'
 
-    canvas.before:
-        Color:
-            rgba: 0, 1, 0, .5
-        Rectangle:
-            pos: root.pos
-            size: root.size
+    # canvas.before:
+    #     Color:
+    #         rgba: 0, 1, 0, .5
+    #     Rectangle:
+    #         pos: root.pos
+    #         size: root.size
 
-    Widget
+    # Widget
 
     Label:
         text: "NAME"
@@ -28,65 +85,21 @@
     ProgressBar:
         size_hint_y: None
         height: '40 dp'
+        value: 100
 
-    Widget
+    # Widget
 
 
-<Boss@FloatLayout>:
+<BossWidget@FloatLayout>:
 
-    canvas.before:
-        Color:
-            rgba: 1, 0, 0, 1
-        Rectangle:
-            pos: root.pos
-            size: root.size
+    # canvas.before:
+    #     Color:
+    #         rgba: 1, 0, 0, 1
+    #     Rectangle:
+    #         pos: root.pos
+    #         size: root.size
 
     Portrait:
         pos_hint: {'center_x': 0.5, 'top': 1.0}
         size_hint: (.8, 1)
         # height: '50 dp'
-
-
-
-
-<Party@GridLayout>:
-    cols: 2
-    spacing: '10 dp'
-
-    canvas:
-        Color:
-            rgb: 0, 0, 1
-        Rectangle:
-            pos: root.pos
-            size: root.size
-
-    Portrait
-    Portrait
-    Portrait
-    Portrait
-
-
-<Spell@Button>
-
-
-<Spells@GridLayout>:
-    cols: 4
-    spacing: '10 dp'
-
-    Spell
-    Spell
-    Spell
-    Spell
-
-
-<Game>:
-    orientation: 'vertical'
-    spacing: '10 dp'
-    padding: '10 dp'
-
-    Boss:
-        size_hint_y: 1
-    Party:
-        size_hint_y: 2
-    Spells:
-        size_hint_y: 1

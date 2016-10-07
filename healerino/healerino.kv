@@ -1,60 +1,31 @@
 #:import FadeTransition kivy.uix.screenmanager.FadeTransition
 
-ScreenManager:
-    transition: FadeTransition()
+<FightWidget>:
+    enemy: enemy_id
 
-    # WelcomeScreen  #FIXME
-    CombatScreen
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.size
+        pos: root.pos
 
+        Enemy:
+            id: enemy_id
 
-<WelcomeScreen>:
-    name: 'welcome_screen'
-
-    AnchorLayout:
-        anchor_x: 'center'
+        Party
 
         BoxLayout:
-            orientation: 'vertical'
-            size_hint: (0.5, 1)
-            spacing: 10
+            Button:
+                text: "D"
+                on_release: root.enemy.health -= 10
 
-            Label:
-                size_hint_y: .4
-                text: "Healerino"
-                valign: 'bottom'
-                bold: True
-                font_size: 50
-                padding: 0, 0
+            Button:
+                text: "H"
+                on_release: root.enemy.health += 10
 
-            AnchorLayout:
-                anchor_x: 'center'
-                size_hint_y: .6
-
-                BoxLayout:
-                    size_hint: .5, .5
-                    orientation: 'vertical'
-                    spacing: 10
-
-                    Button:
-                        halign: 'center'
-                        valign: 'middle'
-                        text: "Play"
-                        on_release: root.manager.current = 'combat_screen'
-
-                    # TODO add Options
-                    # Button:
-                    #     halign: 'center'
-                    #     valign: 'middle'
-                    #     text: "Options"
+        Button:
+            on_release: app.root.current = 'welcome_screen'
 
 
-<CombatScreen>:
-    name: 'combat_screen'
-
-    combat: combat_widget_id
-
-    CombatWidget:
-        id: combat_widget_id
 
     # player: player
 
@@ -73,70 +44,167 @@ ScreenManager:
     #     PlayerWidget:
     #         id: player
 
+<HealthBar@ProgressBar>:
+    canvas:
+        Color:
+            rgb: 0, .9, 0
 
-<PlayerWidget>:
+        Rectangle:
+            # border: (12, 12, 12, 12)
+            pos: self.x, self.center_y - 12
+            size: self.width, 24
+        # Rectangle:
+            # size: root.size
+            # pos: root.pos
 
-    SpellWidget:
-        id: spell_slot_1
 
+
+<Portrait>:
     BoxLayout:
-        orientation: 'horizontal'
+        orientation: 'vertical'
+        padding: '10 dp'
         size: root.size
+        pos: root.pos
 
         Label:
-            text: "Mana:"
+            text: root.name
 
-        ProgressBar:
-            id: manabar
-            value: root.mana
+        BoxLayout:
+            size_hint_y: None
 
+            HealthBar:
+                value: root.health
 
+            Label:
+                text: str(root.health)
 
-<Portrait@BoxLayout>:
-    orientation: 'vertical'
-
-    # canvas.before:
-    #     Color:
-    #         rgba: 0, 1, 0, .5
-    #     Rectangle:
-    #         pos: root.pos
-    #         size: root.size
-
-    # Widget
-
-    Label:
-        text: "NAME"
-        text_size: root.width, None
-        size_hint: (None, None)
-        size: self.texture_size
-        halign: 'left'
-        valign: 'middle'
-
-        # canvas.before:
-        #     Color:
-        #         rgba: 1, 1, 1, .2
-        #     Rectangle:
-        #         pos: root.pos
-        #         size: root.size
-
-    ProgressBar:
-        size_hint_y: None
-        height: '40 dp'
-        value: 100
-
-    # Widget
+<Enemy>:
 
 
-<BossWidget@FloatLayout>:
+<PartyMember>:
 
-    # canvas.before:
-    #     Color:
-    #         rgba: 1, 0, 0, 1
-    #     Rectangle:
-    #         pos: root.pos
-    #         size: root.size
 
-    Portrait:
-        pos_hint: {'center_x': 0.5, 'top': 1.0}
-        size_hint: (.8, 1)
-        # height: '50 dp'
+
+# <PlayerWidget>:
+
+#     SpellWidget:
+#         id: spell_slot_1
+
+#     BoxLayout:
+#         orientation: 'horizontal'
+#         size: root.size
+
+#         Label:
+#             text: "Mana:"
+
+#         ProgressBar:
+#             id: manabar
+#             value: root.mana
+
+
+
+# <Portrait@BoxLayout>:
+#     orientation: 'vertical'
+
+#     # canvas.before:
+#     #     Color:
+#     #         rgba: 0, 1, 0, .5
+#     #     Rectangle:
+#     #         pos: root.pos
+#     #         size: root.size
+
+#     # Widget
+
+#     Label:
+#         text: "NAME"
+#         text_size: root.width, None
+#         size_hint: (None, None)
+#         size: self.texture_size
+#         halign: 'left'
+#         valign: 'middle'
+
+#         # canvas.before:
+#         #     Color:
+#         #         rgba: 1, 1, 1, .2
+#         #     Rectangle:
+#         #         pos: root.pos
+#         #         size: root.size
+
+#     ProgressBar:
+#         size_hint_y: None
+#         height: '40 dp'
+#         value: 100
+
+#     # Widget
+
+
+# <BossWidget@FloatLayout>:
+
+#     # canvas.before:
+#     #     Color:
+#     #         rgba: 1, 0, 0, 1
+#     #     Rectangle:
+#     #         pos: root.pos
+#     #         size: root.size
+
+#     Portrait:
+#         pos_hint: {'center_x': 0.5, 'top': 1.0}
+#         size_hint: (.8, 1)
+#         # height: '50 dp'
+
+
+<WelcomeScreen>:
+    name: 'welcome_screen'
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.5, 1)
+            spacing: 10
+
+            # Label:
+            #     size_hint_y: .4
+            #     text: "Healerino"
+            #     valign: 'bottom'
+            #     bold: True
+            #     font_size: 50
+            #     padding: 0, 0
+
+            AnchorLayout:
+                anchor_x: 'center'
+                size_hint_y: .6
+
+                BoxLayout:
+                    size_hint: .5, .5
+                    orientation: 'vertical'
+                    spacing: 10
+
+                    Button:
+                        halign: 'center'
+                        valign: 'middle'
+                        # text: "Play"
+                        on_release: root.manager.current = 'fight_screen'
+
+                    # TODO add Options
+                    # Button:
+                    #     halign: 'center'
+                    #     valign: 'middle'
+                    #     text: "Options"
+
+
+<FightScreen>:
+    name: 'fight_screen'
+
+    fight: fight_widget_id
+
+    FightWidget:
+        id: fight_widget_id
+
+
+ScreenManager:
+    transition: FadeTransition()
+
+    WelcomeScreen
+    FightScreen

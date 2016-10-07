@@ -3,38 +3,75 @@
 ScreenManager:
     transition: FadeTransition()
 
-    MainScreen
-    BattleScreen
+    # WelcomeScreen  #FIXME
+    CombatScreen
 
 
-<MainScreen>:
-    name: 'main'
+<WelcomeScreen>:
+    name: 'welcome_screen'
 
-    Button:
-        text: 'Start'
-        font_size: 8
-        on_release: app.root.current = 'battle'
+    AnchorLayout:
+        anchor_x: 'center'
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.5, 1)
+            spacing: 10
+
+            Label:
+                size_hint_y: .4
+                text: "Healerino"
+                valign: 'bottom'
+                bold: True
+                font_size: 50
+                padding: 0, 0
+
+            AnchorLayout:
+                anchor_x: 'center'
+                size_hint_y: .6
+
+                BoxLayout:
+                    size_hint: .5, .5
+                    orientation: 'vertical'
+                    spacing: 10
+
+                    Button:
+                        halign: 'center'
+                        valign: 'middle'
+                        text: "Play"
+                        on_release: root.manager.current = 'combat_screen'
+
+                    # TODO add Options
+                    # Button:
+                    #     halign: 'center'
+                    #     valign: 'middle'
+                    #     text: "Options"
 
 
-<BattleScreen>:
-    name: 'battle'
+<CombatScreen>:
+    name: 'combat_screen'
 
-    player: player
+    combat: combat_widget_id
 
-    BoxLayout:
-        orientation: 'vertical'
+    CombatWidget:
+        id: combat_widget_id
 
-        Button:
-            on_release: app.root.current = 'main'
+    # player: player
 
-        BossWidget
+    # BoxLayout:
+    #     orientation: 'vertical'
 
-        ProgressBar:
-            id: cooldown_indicator
-            value: 0
+    #     Button:
+    #         on_release: app.root.current = 'main'
 
-        PlayerWidget:
-            id: player
+    #     BossWidget
+
+    #     ProgressBar:
+    #         id: cooldown_indicator
+    #         value: 0
+
+    #     PlayerWidget:
+    #         id: player
 
 
 <PlayerWidget>:

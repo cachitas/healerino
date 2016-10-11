@@ -2,6 +2,8 @@
 
 <FightWidget>:
     enemy: enemy_id
+    party: party_id
+    # player: player_id
 
     BoxLayout:
         orientation: 'vertical'
@@ -11,16 +13,20 @@
         Enemy:
             id: enemy_id
 
-        Party
+        Party:
+            id: party_id
+
+        # Player:
+        #     id: player_id
 
         BoxLayout:
             Button:
                 text: "D"
-                on_release: root.enemy.health -= 10
+                on_release: root.enemy.heal(-10)
 
             Button:
                 text: "H"
-                on_release: root.enemy.health += 10
+                on_release: root.enemy.heal(10)
 
         Button:
             on_release: app.root.current = 'welcome_screen'
@@ -47,15 +53,19 @@
 <HealthBar@ProgressBar>:
     canvas:
         Color:
-            rgb: 0, .9, 0
+            rgb: 0, .2, 0
 
         Rectangle:
-            # border: (12, 12, 12, 12)
             pos: self.x, self.center_y - 12
             size: self.width, 24
-        # Rectangle:
-            # size: root.size
-            # pos: root.pos
+
+    canvas.after:
+        Color:
+            rgb: 0, .8, 0
+
+        Rectangle:
+            pos: self.x, self.center_y - 12
+            size: self.width * (self.value / float(self.max)) if self.max else 0, 24
 
 
 
@@ -79,6 +89,14 @@
                 text: str(root.health)
 
 <Enemy>:
+
+
+<Party>:
+    layout: layout_id
+
+    GridLayout:
+        id: layout_id
+        cols: 2
 
 
 <PartyMember>:

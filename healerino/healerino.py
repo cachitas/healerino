@@ -8,6 +8,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.logger import Logger
 from kivy.uix.screenmanager import Screen
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.properties import NumericProperty
@@ -48,6 +49,8 @@ from kivy.properties import StringProperty
 class FightWidget(Widget):
 
     enemy = ObjectProperty(None)
+    party = ObjectProperty(None)
+    player = ObjectProperty(None)
 
     def start(self):
         Logger.info("Starting combat engine")
@@ -57,26 +60,46 @@ class FightWidget(Widget):
         self.enemy.health = 50
 
         Logger.info("Preparing your party")
+        self.party.prepare()
 
         Logger.info("Preparing yourself")
 
 
 class Portrait(Widget):
     name = StringProperty("name")
-    health = BoundedNumericProperty(100, min=0)
-    mana = BoundedNumericProperty(100, min=0)
+    health = BoundedNumericProperty(100, min=0, max=100)
+    mana = BoundedNumericProperty(100, min=0, max=100)
     role = OptionProperty("healer", options=["tank", "damager", "healer"])
 
 
 class Enemy(Portrait):
-    pass
+
+    def heal(self, amount):
+        Logger.info("HP %d <-- healing for %d", self.health, amount)
+        try:
+            self.health += amount
+        except ValueError:
+            pass
 
 
 class Party(Widget):
     size = NumericProperty(2)
+    layout = ObjectProperty(None)
+
+    def prepare(self):
+        # TODO
+        Logger.info("Party: initializing")
+        for i in range(self.size):
+            w = PartyMember(name=str(i))
+            print(w, w.name, w.health)
+            self.layout.add_widget(w)
 
 
 class PartyMember(Portrait):
+    pass
+
+
+class Player(PartyMember):
     pass
 
 
@@ -117,7 +140,9 @@ class HealerinoApp(App):
 
     def build(self):
         # TODO just to test this widget
-        return FightWidget()
+        w = FightWidget()
+        w.start()
+        return w
 
 
 if __name__ == '__main__':

@@ -4,9 +4,12 @@ Healerino
 
 """
 
+import random
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.logger import Logger
+from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
@@ -50,26 +53,57 @@ class FightWidget(Widget):
 
     enemy = ObjectProperty(None)
     party = ObjectProperty(None)
-    player = ObjectProperty(None)
+    # player = ObjectProperty(None)
 
     def start(self):
         Logger.info("Starting combat engine")
 
         Logger.info("Preparing your enemy")
         self.enemy.health = 50
+        self.enemy.power = 10
+        self.enemy_move_event = Clock.create_trigger(self.enemy_move, 1.0)
 
         Logger.info("Preparing your party")
         self.party.prepare()
+        # TODO party moves
 
         Logger.info("Preparing yourself")
+        # TODO your healing abilities
+
+    def update(self, dt):
+        Logger.info("Update: %s", dt)
+        self.enemy_move_event()
+
+    def enemy_move(self, dt):
+        # TODO focus tanks
+        target = self.party.get_random_member()
+        if target is None:
+            Logger.info("Party died")
+            self.cleanup()
+        else:
+            Logger.info("Attacking party member %s", target)
+            self.enemy.attack(target)
+
+    def cleanup(self):
+        # TODO game over pop up before returning to main menu
+        self.enemy_move_event.cancel()
+        Clock.unschedule(self.update)
+        self.parent.manager.current = 'welcome_screen'
 
 
 class Portrait(Widget):
     health = BoundedNumericProperty(100, min=0, max=100)
     role = OptionProperty("healer", options=["tank", "damager", "healer"])
+    power = NumericProperty(1)
+
+    def is_alive(self):
+        return self.health > 0
 
 
 class Enemy(Portrait):
+
+    def attack(self, target):
+        target.health -= self.power
 
     def heal(self, amount):
         Logger.info("HP %d <-- healing for %d", self.health, amount)
@@ -84,15 +118,30 @@ class Party(Widget):
     layout = ObjectProperty(None)
 
     def prepare(self):
-        # TODO
         Logger.info("Party: initializing")
         for i in range(self.n):
-            w = PartyMember()
+            w = PartyMember(health=20)
             self.layout.add_widget(w)
+
+    def get_member(self, index):
+        return self.layout.children[index]
+
+    def get_random_member(self):
+        alive_members = [
+            member
+            for member in self.layout.children
+            if member.is_alive()
+        ]
+        if alive_members:
+            return random.choice(alive_members)
+        else:
+            return None
 
 
 class PartyMember(Portrait):
-    pass
+
+    def __repr__(self):
+        return "PartyMember(role=%s, health=%d)" % (self.role, self.health)
 
 
 class Player(PartyMember):
@@ -109,37 +158,30 @@ class FightScreen(Screen):
 
     def on_enter(self):
         self.fight.start()
+        # self.fight.update()
+        self.update = Clock.schedule_interval(self.fight.update, 1.0 / 4.0)
 
-    # player = ObjectProperty()
-    # party_members = ListProperty()
-    # boss = ObjectProperty()
-
-    # def on_enter(self):
-    #     self.ids.cooldown_indicator.value = 0
-    #     self.cd_refresh = Clock.schedule_interval(self.cooldown, 1./60.)
-    #     self.regen = Clock.schedule_interval(self.player.regenerate, 1.0/30.0)
-
-    # def on_leave(self):
-    #     self.ids.cooldown_indicator.value = 0
-    #     self.cd_refresh.cancel()
-
-    # def cooldown(self, dt):
-    #     indicator = self.ids.cooldown_indicator
-    #     if indicator.value < indicator.max:
-    #         indicator.value += 1
-    #     else:
-    #         indicator.value = 0
+    def on_leave(self):
+        self.fight.cleanup()
+        self.update.cancel()
 
 
 class HealerinoApp(App):
-    # pass
+    pass
 
-    def build(self):
-        # TODO just to test this widget
-        # w = Enemy()
-        w = FightWidget()
-        w.start()
-        return w
+    # def build(self):
+    #     # TODO just to test this widget
+    #     # w = Enemy()
+    #     # return w
+
+    #     # w = FightWidget()
+    #     # w.start()
+    #     # return w
+
+    #     sm = ScreenManager()
+    #     s = FightScreen()
+    #     sm.add_widget(s)
+    #     return sm
 
 
 if __name__ == '__main__':

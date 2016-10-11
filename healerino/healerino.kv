@@ -20,6 +20,8 @@
         #     id: player_id
 
         BoxLayout:
+            size_hint_y: None
+
             Button:
                 text: "D"
                 on_release: root.enemy.heal(-10)
@@ -28,8 +30,9 @@
                 text: "H"
                 on_release: root.enemy.heal(10)
 
-        Button:
-            on_release: app.root.current = 'welcome_screen'
+        # Button:
+        #     size_hint_y: None
+        #     on_release: app.root.current = 'welcome_screen'
 
 
 
@@ -53,40 +56,51 @@
 <HealthBar@ProgressBar>:
     canvas:
         Color:
-            rgb: 0, .2, 0
+            rgb: .2, .2, .2
 
         Rectangle:
-            pos: self.x, self.center_y - 12
-            size: self.width, 24
+            pos: self.x, self.y
+            size: self.width, self.height
 
     canvas.after:
         Color:
-            rgb: 0, .8, 0
+            rgb: .8, .8, .8
 
         Rectangle:
-            pos: self.x, self.center_y - 12
-            size: self.width * (self.value / float(self.max)) if self.max else 0, 24
-
+            pos: self.x, self.y
+            size: self.width * (self.value / float(self.max)) if self.max else 0, self.height
 
 
 <Portrait>:
     BoxLayout:
         orientation: 'vertical'
         padding: '10 dp'
+        spacing: '5 dp'
         size: root.size
         pos: root.pos
 
-        Label:
-            text: root.name
-
         BoxLayout:
-            size_hint_y: None
-
-            HealthBar:
-                value: root.health
 
             Label:
-                text: str(root.health)
+                text: root.name
+                # text_size: root.width, None
+                # size_hint: (None, None)
+                # size: self.texture_size
+                # halign: 'left'
+                # valign: 'middle'
+
+            Image:
+                # TODO
+                canvas.before:
+                    Color:
+                        rgb: 0, .5, 0
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+        HealthBar:
+            value: root.health
+
 
 <Enemy>:
 
@@ -97,10 +111,19 @@
     GridLayout:
         id: layout_id
         cols: 2
+        spacing: '10 dp'
+        size: root.size
+        pos: root.pos
 
 
 <PartyMember>:
+    canvas.before:
+        Color:
+            rgb: 0, 0, .2
 
+        Rectangle:
+            pos: root.pos
+            size: root.size
 
 
 # <PlayerWidget>:
@@ -182,13 +205,13 @@
             size_hint: (0.5, 1)
             spacing: 10
 
-            # Label:
-            #     size_hint_y: .4
-            #     text: "Healerino"
-            #     valign: 'bottom'
-            #     bold: True
-            #     font_size: 50
-            #     padding: 0, 0
+            Label:
+                size_hint_y: .4
+                text: "Healerino"
+                valign: 'bottom'
+                bold: True
+                font_size: 50
+                padding: 0, 0
 
             AnchorLayout:
                 anchor_x: 'center'

@@ -83,13 +83,13 @@ class Enemy(Portrait):
 
 
 class Party(Widget):
-    size = NumericProperty(2)
+    n = NumericProperty(3)
     layout = ObjectProperty(None)
 
     def prepare(self):
         # TODO
         Logger.info("Party: initializing")
-        for i in range(self.size):
+        for i in range(self.n):
             w = PartyMember(name=str(i))
             print(w, w.name, w.health)
             self.layout.add_widget(w)
@@ -140,8 +140,9 @@ class HealerinoApp(App):
 
     def build(self):
         # TODO just to test this widget
-        w = FightWidget()
-        w.start()
+        w = Enemy()
+        # w = FightWidget()
+        # w.start()
         return w
 
 

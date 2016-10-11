@@ -56,7 +56,6 @@ class FightWidget(Widget):
         Logger.info("Starting combat engine")
 
         Logger.info("Preparing your enemy")
-        self.enemy.name = "test"
         self.enemy.health = 50
 
         Logger.info("Preparing your party")
@@ -66,9 +65,7 @@ class FightWidget(Widget):
 
 
 class Portrait(Widget):
-    name = StringProperty("name")
     health = BoundedNumericProperty(100, min=0, max=100)
-    mana = BoundedNumericProperty(100, min=0, max=100)
     role = OptionProperty("healer", options=["tank", "damager", "healer"])
 
 
@@ -90,8 +87,7 @@ class Party(Widget):
         # TODO
         Logger.info("Party: initializing")
         for i in range(self.n):
-            w = PartyMember(name=str(i))
-            print(w, w.name, w.health)
+            w = PartyMember()
             self.layout.add_widget(w)
 
 
@@ -140,9 +136,9 @@ class HealerinoApp(App):
 
     def build(self):
         # TODO just to test this widget
-        w = Enemy()
-        # w = FightWidget()
-        # w.start()
+        # w = Enemy()
+        w = FightWidget()
+        w.start()
         return w
 
 

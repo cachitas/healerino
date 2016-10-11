@@ -72,34 +72,28 @@
 
 
 <Portrait>:
-    BoxLayout:
-        orientation: 'vertical'
-        padding: '10 dp'
-        spacing: '5 dp'
-        size: root.size
+    max_height: '24 dp'
+
+    AnchorLayout:
         pos: root.pos
+        size: root.size
+        padding: '5 dp'
 
         BoxLayout:
-
-            Label:
-                text: root.name
-                # text_size: root.width, None
-                # size_hint: (None, None)
-                # size: self.texture_size
-                # halign: 'left'
-                # valign: 'middle'
+            orientation: 'horizontal'
+            spacing: '5 dp'
+            size_hint_y: None
+            height: root.max_height
 
             Image:
-                # TODO
-                canvas.before:
-                    Color:
-                        rgb: 0, .5, 0
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
+                color: 1, 1, 0, 1
+                size_hint: None, None
+                size: root.max_height, root.max_height
 
-        HealthBar:
-            value: root.health
+            HealthBar:
+                size_hint_y: None
+                height: root.max_height
+                value: root.health
 
 
 <Enemy>:

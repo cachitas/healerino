@@ -156,9 +156,10 @@ class FightScreen(Screen):
 
     fight = ObjectProperty(None)
 
-    def on_enter(self):
+    def on_pre_enter(self):
         self.fight.start()
-        # self.fight.update()
+
+    def on_enter(self):
         self.update = Clock.schedule_interval(self.fight.update, 1.0 / 4.0)
 
     def on_leave(self):
